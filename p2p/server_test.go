@@ -284,6 +284,15 @@ func TestServerAtCap(t *testing.T) {
 	if !c.is(trustedConn) {
 		t.Error("Server did not set trusted flag")
 	}
+}
+
+func TestServerPeerLimits(t *testing.T) {
+	srvkey := newkey()
+	srvid := discover.PubkeyID(&srvkey.PublicKey)
+
+	var tp *setupTransport = &setupTransport{id: srvid, phs: &protoHandshake{ID: srvid}}
+	var flags connFlag = dynDialedConn
+	var dialDest *discover.Node = &discover.Node{ID: srvid}
 
 	// Remove from trusted set and try again
 	srv.RemoveTrustedPeer(newNode(trustedID, ""))
